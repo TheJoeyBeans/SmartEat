@@ -10,7 +10,8 @@
     "react-native-web": "^0.11.7",
     "react-router-dom": "^5.1.2",
     "react-router-native": "^5.1.2",
-    "react-scripts": "^3.2.0"
+    "react-scripts": "^3.2.0",
+    "react-semantic-ui": "^0.2.0"
   },
   "scripts": {
     "start": "react-scripts start",
