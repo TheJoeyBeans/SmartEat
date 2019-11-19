@@ -1,4 +1,6 @@
 from flask import Flask, g
+from flask_cors import CORS
+from resources.meals import meal
 import models
 
 DEBUG = True
@@ -16,10 +18,8 @@ def after_request(response):
 	g.db.close()
 	return response
 
-@app.route('/')
-def index():
-	return 'hi'
-
+CORS(meal, origins=['http://localhost:3000'], supports_credentials=True)
+app.register_blueprint(meal, url_prefix='/api/v1/meals')
 
 if __name__ == '__main__':
 	models.initialize()
