@@ -1,12 +1,13 @@
 import React from 'react';
+import MainContainer from './MainContainer';
 import logo from './logo.svg';
 import './App.css';
 
 function App() {
   return (
-    <React.Fragment>
-      hi 
-    </React.Fragment>
+    <main>
+      <MainContainer />
+    </main>
   );
 }
 
