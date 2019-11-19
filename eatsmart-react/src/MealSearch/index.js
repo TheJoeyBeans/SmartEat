@@ -9,9 +9,14 @@ class MealSearch extends Component{
 			input: ''
 		}
 	}
+	handleChange = (e) => {
+		this.setState({
+			input : e.currentTarget.value
+		})
+	}
 	render(){
 		return(
-			<Searchbar placeholder='Search'/>
+			<Searchbar name='input' onChange={this.handleChange} placeholder='Search'/>
 		)
 	}
 }
