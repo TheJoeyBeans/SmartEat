@@ -10,7 +10,7 @@ class MakeMealForm extends Component {
 		super();
 
 		this.state = {
-			meal_type: '',
+			meal_type: 'breakfast',
 			food: [],
 			query: ''
 		}
@@ -20,6 +20,11 @@ class MakeMealForm extends Component {
 			query: e.currentTarget.value
 		})
 	}
+	handleMealType = (e) => {
+		this.setState({
+			meal_type: e.currentTarget.value
+		})
+	}
 	fetchSearchResults = (query) => {
 		const searchUrl = `https://api.edamam.com/api/food-database/parser?ingr=${this.state.query}&app_id=${apiId}&app_key=${apiKey}`;
 		axios.get(searchUrl, {
@@ -27,7 +32,6 @@ class MakeMealForm extends Component {
 				'Content-Type': 'application/json'
 			}
 		}).then(response =>{
-			console.log(response)
 			const foodText = response.data.text;
 			const foodCal = response.data.parsed[0].food.nutrients.ENERC_KCAL
 			this.setState(state =>{
@@ -42,12 +46,20 @@ class MakeMealForm extends Component {
 		})
 	}
 	render(){
+		const addedFood = this.state.food.map((food, i) =>{
+			return(
+				<ul key={i}>
+					Name: {food.foodName}<br/>
+					Calories: {food.foodCalories}
+				</ul>
+			)
+		})
 		return(
 			<Modal open={this.props.open}>
 				<Modal.Content>
 					<Form>
 						<Label>Which meal is this?</Label>
-							<select className="ui dropdown">
+							<select name='meal_type' onChange={this.handleMealType} className="ui dropdown">
 								<option value="breakfast">Breakfast</option>
 								<option value="lunch">Lunch</option>
 								<option value="dinner">Dinner</option>
@@ -56,7 +68,8 @@ class MakeMealForm extends Component {
 						<Label>What are you eating?</Label>
 							<Searchbar name='input' onChange={this.handleChange} placeholder='Search'/>
 							<Button onClick={this.fetchSearchResults}>Add Food</Button>
-						<Button type='Submit' onClick={this.props.closeAndEdit}>Complete Meal</Button>
+							<li>{addedFood}</li>
+						<Button type='Submit' onClick={(e) => this.props.close(e, this.state)}>Complete Meal</Button>
 					</Form>
 				</Modal.Content>
 			</Modal>
