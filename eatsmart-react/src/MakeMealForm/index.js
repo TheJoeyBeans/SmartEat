@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
 import { Form, Button, Label, Modal } from 'semantic-ui-react';
+import { Searchbar } from 'react-native-paper';
+import axios from 'axios';
+const apiKey = 'dc1e6e6904af11f3792ca4dad0a5495b';
+const apiId = '230690a4';
 
 class MakeMealForm extends Component {
 	constructor(){
@@ -7,7 +11,8 @@ class MakeMealForm extends Component {
 
 		this.state = {
 			meal_type: '',
-			food: []
+			food: [],
+			query: ''
 		}
 	}
 	// addFood = (e) =>{
@@ -19,10 +24,16 @@ class MakeMealForm extends Component {
 	// }
 	handleChange = (e) => {
 		this.setState({
-			food: [{
-				[e.currentTarget.name] : e.currentTarget.value
-			}]
+			query: e.currentTarget.value
 		})
+	}
+	fetchSearchResults = (query) => {
+		const searchUrl = `https://api.edamam.com/api/food-database/parser?ingr=${this.state.query}&app_id=${apiId}&app_key=${apiKey}`;
+		axios.get(searchUrl, {
+			headers: {
+				'Content-Type': 'application/json'
+			}
+		}).then(function (res) {console.log(res)})
 	}
 	render(){
 		return(
@@ -37,9 +48,9 @@ class MakeMealForm extends Component {
 								<option value="snack">Snack</option>
 							</select>
 						<Label>What are you eating?</Label>
-							<Form.Input type='text' name='name' value={this.state.food.name} onChange={this.handleChange}/>
-							<Form.Input type='text' name='calories' value={this.state.food.calories} onChange={this.handleChange}/>
-							// <Button onClick={this.addFood}>Add Food</Button>
+							<Searchbar name='input' onChange={this.handleChange} placeholder='Search'/>
+							<Button onClick={this.fetchSearchResults}>Search Food</Button>
+							<Button onClick={this.addFood}>Add Food</Button>
 						<Button type='Submit' onClick={this.props.closeAndEdit}>Complete Meal</Button>
 					</Form>
 				</Modal.Content>
