@@ -16,7 +16,8 @@ class MainContainer extends Component {
 			showMakeMealModal: true
 		})
 	}
-	closeMakeModal = () =>{
+	closeMakeModal = (e, meal) =>{
+		console.log(meal)
 		this.setState({
 			showMakeMealModal: false
 		})
