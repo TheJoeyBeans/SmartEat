@@ -15,13 +15,6 @@ class MakeMealForm extends Component {
 			query: ''
 		}
 	}
-	// addFood = (e) =>{
-	// 	this.setState(state => {
-	// 		const food = state.food.concat({
-				
-	// 		})
-	// 	})
-	// }
 	handleChange = (e) => {
 		this.setState({
 			query: e.currentTarget.value
@@ -33,7 +26,20 @@ class MakeMealForm extends Component {
 			headers: {
 				'Content-Type': 'application/json'
 			}
-		}).then(function (res) {console.log(res)})
+		}).then(response =>{
+			console.log(response)
+			const foodText = response.data.text;
+			const foodCal = response.data.parsed[0].food.nutrients.ENERC_KCAL
+			this.setState(state =>{
+				const food = state.food.concat({
+					foodName: foodText,
+					foodCalories: foodCal
+				});
+				return{
+					food
+				}
+			})
+		})
 	}
 	render(){
 		return(
@@ -41,7 +47,7 @@ class MakeMealForm extends Component {
 				<Modal.Content>
 					<Form>
 						<Label>Which meal is this?</Label>
-							<select class="ui dropdown">
+							<select className="ui dropdown">
 								<option value="breakfast">Breakfast</option>
 								<option value="lunch">Lunch</option>
 								<option value="dinner">Dinner</option>
@@ -49,8 +55,7 @@ class MakeMealForm extends Component {
 							</select>
 						<Label>What are you eating?</Label>
 							<Searchbar name='input' onChange={this.handleChange} placeholder='Search'/>
-							<Button onClick={this.fetchSearchResults}>Search Food</Button>
-							<Button onClick={this.addFood}>Add Food</Button>
+							<Button onClick={this.fetchSearchResults}>Add Food</Button>
 						<Button type='Submit' onClick={this.props.closeAndEdit}>Complete Meal</Button>
 					</Form>
 				</Modal.Content>
