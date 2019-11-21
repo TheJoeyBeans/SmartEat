@@ -12,17 +12,33 @@ class MainContainer extends Component {
 			showMakeMealModal: false
 		}
 	}
+	componentDidMount(){
+		this.getMeals();
+	}
+	getMeals = async () => {
+		try {
+			const meals = await fetch(process.env.REACT_APP_API_URL + '/api/v1/meals/', {
+				credentials: 'include',
+				method: 'GET'
+			});
+			const parsedMeals = await meals.json();
+			console.log(parsedMeals, "Look at these parsedMeals");
+			this.setState({
+				meals: parsedMeals.data
+			})
+			console.log(this.state.meals)
+		} catch(err){
+			console.log(err);
+		}
+	}
 	openAndCreate = () =>{
 		this.setState({
 			showMakeMealModal: true
 		})
 	}
 	closeModalAndMakeMeal = async (e, meal) =>{
-		console.log(meal, "This is meal")
 		const mealKind = meal.meal_type;
-		console.log(mealKind, "This is mealKind")
 		let mealList = meal.food;
-		console.log(mealList, "This is mealList")
 		let totalCal = 0;
 		for(let i = 0; i < meal.food.length; i++){
 			totalCal += meal.food[i].foodCalories
@@ -33,7 +49,6 @@ class MainContainer extends Component {
 			'food' : mealList,
 			'calories' : totalCal
 		}
-		console.log(mealBody, "This is the meal body")
 		e.preventDefault();
 
 		try {
@@ -45,14 +60,11 @@ class MainContainer extends Component {
 					'Content-Type': 'application/json'
 				}
 			});
-			console.log(createdMealResponse, 'Meal response')
 
 			const parsedResponse = await createdMealResponse.json();
-			console.log(parsedResponse, 'this is response');
 
 			if (parsedResponse.status.code === 201) {
 				this.setState({meals: [...this.state.meals, parsedResponse.data]})
-				console.log(this.state)
 			} else {
 				alert(parsedResponse.status.message);
 			}

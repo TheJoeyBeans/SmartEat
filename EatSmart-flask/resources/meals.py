@@ -9,9 +9,23 @@ def get_all_meals():
 	try:
 		meals = [model_to_dict(meal) for meal in models.Meal.select()]
 		print(meals)
-		return josnify(data=meals, status={"code": 200, "message": "Success"})
+		return jsonify(data=meals, status={"code": 200, "message": "Success"})
 	except models.DoesNotExist:
-		return josnify(data={}, status={"code": 401, "message": "Error getting the resources"})
+		return jsonify(data={}, status={"code": 401, "message": "Error getting the resources"})
+
+@meal.route('/<id>/', methods=['PUT'])
+def updated_meal(id):
+	payload = request.get_json()
+	meal_to_update = models.Meal.get(id=id)
+
+	meal_to_update.update(
+		meal_type=payload['meal_type'],
+		food=payload['food'],
+		calories=payload['calories']
+	).execute()
+
+	update_meal_dict = model_to_dict(meal_to_update, max_depth=0)
+	return jsonify(status={'code': 200, 'msg': 'success'}, data=update_meal_dict)
 
 @meal.route('/', methods=['POST'])
 def create_meal():

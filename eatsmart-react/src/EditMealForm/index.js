@@ -5,7 +5,7 @@ import axios from 'axios';
 const apiKey = 'dc1e6e6904af11f3792ca4dad0a5495b';
 const apiId = '230690a4';
 
-class MakeMealForm extends Component {
+class EditMealForm extends Component {
 	constructor(){
 		super();
 
@@ -32,13 +32,10 @@ class MakeMealForm extends Component {
 				'Content-Type': 'application/json'
 			}
 		}).then(response =>{
-			console.log(response.data, "I am the response");
-			const foodUniqueId = response.data.parsed[0].food.foodId
 			const foodText = response.data.text;
 			const foodCal = response.data.parsed[0].food.nutrients.ENERC_KCAL
 			this.setState(state =>{
 				const food = state.food.concat({
-					foodId: foodUniqueId,
 					foodName: foodText,
 					foodCalories: foodCal
 				});
@@ -55,22 +52,13 @@ class MakeMealForm extends Component {
 			query: ''
 		})
 	}
-	removeFood = (i) => {
-		console.log(i)
-		this.setState({
-			food: this.state.food.filter((food) => food.foodId !== i)
-		})
-	}
 	render(){
 		const addedFood = this.state.food.map((food, i) =>{
 			return(
-				<div key={i}>
-				<ul>
+				<ul key={i}>
 					Name: {food.foodName}<br/>
 					Calories: {food.foodCalories}
 				</ul>
-				<Button onClick={() => this.removeFood(food.foodId)}>Delete Food</Button>
-				</div>
 			)
 		})
 		return(
@@ -99,4 +87,6 @@ class MakeMealForm extends Component {
 	}
 }
 
-export default MakeMealForm
+export default EditMealForm
+
+
