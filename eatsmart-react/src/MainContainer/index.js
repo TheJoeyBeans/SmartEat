@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import MealSearch from '../MealSearch';
 import MakeMealForm from '../MakeMealForm';
+import MealList from '../MealList';
 
 class MainContainer extends Component {
 	constructor(props){
@@ -17,14 +18,22 @@ class MainContainer extends Component {
 		})
 	}
 	closeModalAndMakeMeal = async (e, meal) =>{
+		console.log(meal, "This is meal")
 		const mealKind = meal.meal_type;
-		const foodText = meal.food[0].foodName;
-		const foodCal = meal.food[0].foodCalories;
+		console.log(mealKind, "This is mealKind")
+		let mealList = meal.food;
+		console.log(mealList, "This is mealList")
+		let totalCal = 0;
+		for(let i = 0; i < meal.food.length; i++){
+			totalCal += meal.food[i].foodCalories
+		}
+
 		const mealBody = {
 			'meal_type' : mealKind,
-			'food' : foodText,
-			'calories' : foodCal
+			'food' : mealList,
+			'calories' : totalCal
 		}
+		console.log(mealBody, "This is the meal body")
 		e.preventDefault();
 
 		try {
@@ -60,6 +69,7 @@ class MainContainer extends Component {
 			<div>
 				<MealSearch openAndCreate={this.openAndCreate}/>
 				<MakeMealForm open={this.state.showMakeMealModal} close={this.closeModalAndMakeMeal}/>
+				<MealList meals={this.state.meals} />
 			</div>
 		)
 	}
