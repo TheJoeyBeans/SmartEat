@@ -2,6 +2,7 @@ import React from 'react';
 import { Card, Button } from 'semantic-ui-react';
 
 function MealList(props){
+	console.log(props.meals, "meal props")
 
 	const meals = props.meals.map((meal) => {
 
@@ -12,12 +13,7 @@ function MealList(props){
 					<Card.Description>
 					For {meal.meal_type}, you ate:<br/>
 					<ul>
-						{meal.food.map((foods, i) =>
-							<li key={i}>
-								Food: {foods.foodName}<br/>
-								Calories: {foods.foodCalories}
-							</li>
-						)}
+					
 					</ul><br/>
 					For a total of {meal.calories} calories. 
 					</Card.Description>
