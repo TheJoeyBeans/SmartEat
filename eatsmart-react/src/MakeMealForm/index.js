@@ -45,6 +45,13 @@ class MakeMealForm extends Component {
 			})
 		})
 	}
+	resetState = () => {
+		this.setState({
+			meal_type: 'breakfast',
+			food: [],
+			query: ''
+		})
+	}
 	render(){
 		const addedFood = this.state.food.map((food, i) =>{
 			return(
@@ -69,7 +76,10 @@ class MakeMealForm extends Component {
 							<Searchbar name='input' onChange={this.handleChange} placeholder='Search'/>
 							<Button onClick={this.fetchSearchResults}>Add Food</Button>
 							<li>{addedFood}</li>
-						<Button type='Submit' onClick={(e) => this.props.close(e, this.state)}>Complete Meal</Button>
+						<Button type='Submit' onClick={(e) => {
+								this.props.close(e, this.state); 
+								this.resetState();
+							}}>Complete Meal</Button>
 					</Form>
 				</Modal.Content>
 			</Modal>
