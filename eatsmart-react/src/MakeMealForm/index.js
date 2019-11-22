@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Form, Button, Label, Modal } from 'semantic-ui-react';
-import { Searchbar } from 'react-native-paper';
+import { Search, Form, Button, Label, Modal } from 'semantic-ui-react';
+// import { Searchbar } from 'react-native-paper';
 import axios from 'axios';
 const apiKey = 'dc1e6e6904af11f3792ca4dad0a5495b';
 const apiId = '230690a4';
@@ -74,25 +74,25 @@ class MakeMealForm extends Component {
 			)
 		})
 		return(
-			<Modal open={this.props.open}>
+			<Modal className='editModal' open={this.props.open}>
 				<Modal.Content>
-					<Form>
-						<Label>Which meal is this?</Label>
+					<Modal.Description>
+						<Label>Which meal is this?</Label><br/>
 							<select name='meal_type' onChange={this.handleMealType} className="ui dropdown">
 								<option value="breakfast">Breakfast</option>
 								<option value="lunch">Lunch</option>
 								<option value="dinner">Dinner</option>
 								<option value="snack">Snack</option>
-							</select>
-						<Label>What are you eating?</Label>
-							<Searchbar name='input' onChange={this.handleChange} placeholder='Search'/>
+							</select><br/>
+						<Label>What are you eating?</Label><br/>
+							<Search name='input' onSearchChange={this.handleChange} placeholder='Search'/>
 							<Button onClick={this.fetchSearchResults}>Add Food</Button>
 							<li>{addedFood}</li>
 						<Button type='Submit' onClick={(e) => {
 								this.props.close(e, this.state); 
 								this.resetState();
 							}}>Complete Meal</Button>
-					</Form>
+					</Modal.Description>
 				</Modal.Content>
 			</Modal>
 		)
@@ -102,3 +102,4 @@ class MakeMealForm extends Component {
 export default MakeMealForm
 
 
+// Searchbar name='input' onChange={this.handleChange} placeholder='Search'
