@@ -3,8 +3,19 @@ import { Card, Button, Grid } from 'semantic-ui-react';
 
 function MealList(props){
 	console.log(props.meals, "meal props")
-
+	console.log(props.foodItems, "foodItem props")
+	
 	const meals = props.meals.map((meal) => {
+		const foodItems = props.foodItems.map((foodItem, i) =>{
+			if(meal.id === foodItem.meal.id){
+				return(
+					<li key={i}>
+						Food Name: {foodItem.food_name}<br/>
+						Calories: {foodItem.food_calories}
+					</li>
+				)
+			}
+		});
 
 		return (
 			<Grid.Column>
@@ -14,7 +25,7 @@ function MealList(props){
 						<Card.Description>
 						For {meal.meal_type}, you ate:<br/>
 						<ul>
-						
+							{ foodItems }
 						</ul><br/>
 						For a total of {meal.calories} calories. 
 						</Card.Description>

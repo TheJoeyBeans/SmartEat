@@ -186,7 +186,7 @@ class MainContainer extends Component {
 				</header>
 				<Grid columns={3}>	
 					<Grid.Row>
-						<MealList meals={this.state.meals} /*openAndEdit={this.openAndEdit}*/ />
+						<MealList meals={this.state.meals} foodItems={this.state.foodItems}/*openAndEdit={this.openAndEdit}*/ />
 					</Grid.Row>
 					<MakeMealForm open={this.state.showMakeMealModal} close={this.closeModalAndMakeMeal}/>
 				</Grid>
