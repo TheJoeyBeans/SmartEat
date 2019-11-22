@@ -19,7 +19,7 @@ function MealList(props){
 					</Card.Description>
 				</Card.Content>
 				<Card.Content extra>
-					<Button onClick={() => props.openAndEdit(meal)}>Edit Meal</Button>
+					<Button /*onClick={() => props.openAndEdit(meal)}*/>Edit Meal</Button>
 				</Card.Content>
 			</Card>
 		)

@@ -1,6 +1,7 @@
 from flask import Flask, g
 from flask_cors import CORS
 from resources.meals import meal
+from resources.foodItems import foodItem
 import models
 
 DEBUG = True
@@ -20,6 +21,9 @@ def after_request(response):
 
 CORS(meal, origins=['http://localhost:3000'], supports_credentials=True)
 app.register_blueprint(meal, url_prefix='/api/v1/meals')
+
+CORS(foodItem, origins=['http://localhost:3000'], supports_credentials=True)
+app.register_blueprint(foodItem, url_prefix='/api/v1/foodItems')
 
 if __name__ == '__main__':
 	models.initialize()
