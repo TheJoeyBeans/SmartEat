@@ -22,6 +22,7 @@ class MainContainer extends Component {
 	}
 	componentDidMount(){
 		this.getMeals();
+		this.getFoodItems();
 	}
 	getMeals = async () => {
 		try {
@@ -34,7 +35,23 @@ class MainContainer extends Component {
 			this.setState({
 				meals: parsedMeals.data
 			})
-			console.log(this.state.meals)
+			console.log(this.state.meals, "Current Meals in state")
+		} catch(err){
+			console.log(err);
+		}
+	}
+	getFoodItems = async () => {
+		try {
+			const foodItems = await fetch(process.env.REACT_APP_API_URL + '/api/v1/foodItems/', {
+				credentials: 'include', 
+				method: 'GET'
+			});
+			const parsedFoodItems = await foodItems.json();
+			console.log(parsedFoodItems, "look at these foodItems");
+			this.setState({
+				foodItems: parsedFoodItems.data
+			})
+			console.log(this.state.foodItems, "Current Food Items in state")
 		} catch(err){
 			console.log(err);
 		}
