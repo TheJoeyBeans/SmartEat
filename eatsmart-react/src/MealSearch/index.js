@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
-import { Searchbar } from 'react-native-paper';
-import { Button } from 'semantic-ui-react';
+// import { Searchbar } from 'react-native-paper';
+import { Search, Button } from 'semantic-ui-react';
 
 class MealSearch extends Component {
 	constructor(){
@@ -18,7 +18,7 @@ class MealSearch extends Component {
 	render(){
 		return(
 			<div>
-				<Searchbar name='input' onChange={this.handleChange} placeholder='Search'/>
+				<Search name='input' onSearchChange={this.handleChange} placeholder='Search'/>
 				<Button onClick={this.props.openAndCreate}>Make a Meal</Button>
 			</div>
 		)

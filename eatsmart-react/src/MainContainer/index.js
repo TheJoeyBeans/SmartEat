@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import MealSearch from '../MealSearch';
 import MakeMealForm from '../MakeMealForm';
 import MealList from '../MealList';
+import { Grid } from 'semantic-ui-react';
 
 class MainContainer extends Component {
 	constructor(props){
@@ -163,10 +164,15 @@ class MainContainer extends Component {
 	render(){
 		return(
 			<div>
-				<MealSearch openAndCreate={this.openAndCreate}/>
-				<MakeMealForm open={this.state.showMakeMealModal} close={this.closeModalAndMakeMeal}/>
-
-				<MealList meals={this.state.meals} /*openAndEdit={this.openAndEdit}*/ />
+				<header>
+					<MealSearch openAndCreate={this.openAndCreate}/>
+				</header>
+				<Grid columns={3}>	
+					<Grid.Row>
+						<MealList meals={this.state.meals} /*openAndEdit={this.openAndEdit}*/ />
+					</Grid.Row>
+					<MakeMealForm open={this.state.showMakeMealModal} close={this.closeModalAndMakeMeal}/>
+				</Grid>
 			</div>
 		)
 	}
