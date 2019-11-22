@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import MealSearch from '../MealSearch';
 import MakeMealForm from '../MakeMealForm';
 import MealList from '../MealList';
+import MainHeader from '../MainHeader';
 import { Grid } from 'semantic-ui-react';
 
 class MainContainer extends Component {
@@ -182,7 +183,8 @@ class MainContainer extends Component {
 		return(
 			<div>
 				<header>
-					<MealSearch openAndCreate={this.openAndCreate}/>
+					<MealSearch />
+					<MainHeader meals={this.state.meals} openAndCreate={this.openAndCreate}/>
 				</header>
 				<Grid columns={3}>	
 					<Grid.Row>
