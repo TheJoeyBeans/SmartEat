@@ -9,7 +9,14 @@ class MainContainer extends Component {
 
 		this.state = {
 			meals: [],
-			showMakeMealModal: false
+			foodItems:[],
+			mealToEdit: {
+				meal_type: '',
+				food: '',
+				calories: ''
+			},
+			showMakeMealModal: false,
+			showEditMealModal: false
 		}
 	}
 	componentDidMount(){
@@ -36,21 +43,25 @@ class MainContainer extends Component {
 			showMakeMealModal: true
 		})
 	}
+	// openAndEdit = (mealFromTheList) => {
+	// 	console.log(mealFromTheList, "This is the meal I'm editing")
+	// 	// this.setState({
+	// 	// 	showEditMealModal: true
+	// 	// })
+	// }
 	closeModalAndMakeMeal = async (e, meal) =>{
 		const mealKind = meal.meal_type;
 		let mealList = meal.food;
 		let totalCal = 0;
+		let mealId = ''
 		for(let i = 0; i < meal.food.length; i++){
 			totalCal += meal.food[i].foodCalories
 		}
-
 		const mealBody = {
 			'meal_type' : mealKind,
-			'food' : mealList,
 			'calories' : totalCal
 		}
 		e.preventDefault();
-
 		try {
 			const createdMealResponse = await fetch(process.env.REACT_APP_API_URL + '/api/v1/meals/', {
 				method: 'POST',
@@ -60,9 +71,8 @@ class MainContainer extends Component {
 					'Content-Type': 'application/json'
 				}
 			});
-
 			const parsedResponse = await createdMealResponse.json();
-
+			mealId = parsedResponse.data.id;
 			if (parsedResponse.status.code === 201) {
 				this.setState({meals: [...this.state.meals, parsedResponse.data]})
 			} else {
@@ -75,13 +85,88 @@ class MainContainer extends Component {
 		this.setState({
 			showMakeMealModal: false
 		})
+		this.createFoodItem(mealId, mealList);
 	}
+	createFoodItem = async (mealId, mealList) => {
+		console.log(mealId, "<--mealId");
+		console.log(mealList, "<--mealList");
+
+		try {
+			for(let i = 0; i < mealList.length; i++){
+				const foodBody = {
+					'food_name': mealList[i].foodName ,
+					'food_calories': mealList[i].foodCalories,
+					'meal': mealId
+				}
+				const createdFoodItemResponse = await fetch(process.env.REACT_APP_API_URL + '/api/v1/foodItems/', {
+					method: 'POST', 
+					credentials: 'include',
+					body: JSON.stringify(foodBody),
+					headers: {
+						'Content-Type' : 'application/json'
+					}
+				});
+				const parsedResponse = await createdFoodItemResponse.json();
+				if (parsedResponse.status.code === 201) {
+					this.setState({foodItems: [...this.state.foodItems, parsedResponse.data]})
+				} else {
+					alert(parsedResponse.status.message);
+				}
+			} 
+			} catch(err){
+				console.log('error')
+				console.log(err)
+		}
+
+	}
+	// closeModalAndEditMeal = async (e, meal) => {
+	// 	const mealKind = meal.meal_type;
+	// 	let mealList = meal.food;
+	// 	let totalCal = 0;
+	// 	for(let i = 0; i < meal.food.length; i++){
+	// 		totalCal += meal.food[i].foodCalories
+	// 	}
+
+	// 	const mealBody = {
+	// 		'meal_type' : mealKind,
+	// 		'food' : mealList,
+	// 		'calories' : totalCal
+	// 	}
+	// 	e.preventDefault();
+
+	// 	try {
+	// 		const createdMealResponse = await fetch(process.env.REACT_APP_API_URL + '/api/v1/meals/', {
+	// 			method: 'POST',
+	// 			credentials: 'include',
+	// 			body: JSON.stringify(mealBody),
+	// 			headers: {
+	// 				'Content-Type': 'application/json'
+	// 			}
+	// 		});
+
+	// 		const parsedResponse = await createdMealResponse.json();
+
+	// 		if (parsedResponse.status.code === 201) {
+	// 			this.setState({meals: [...this.state.meals, parsedResponse.data]})
+	// 		} else {
+	// 			alert(parsedResponse.status.message);
+	// 		}
+	// 	} catch(err){
+	// 		console.log('error')
+	// 		console.log(err)
+	// 	}
+	// 	this.setState({
+	// 		showMakeMealModal: false
+	// 	})
+
+	// }
 	render(){
 		return(
 			<div>
 				<MealSearch openAndCreate={this.openAndCreate}/>
 				<MakeMealForm open={this.state.showMakeMealModal} close={this.closeModalAndMakeMeal}/>
-				<MealList meals={this.state.meals} />
+
+				<MealList meals={this.state.meals} /*openAndEdit={this.openAndEdit}*/ />
 			</div>
 		)
 	}

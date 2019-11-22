@@ -18,6 +18,9 @@ function MealList(props){
 					For a total of {meal.calories} calories. 
 					</Card.Description>
 				</Card.Content>
+				<Card.Content extra>
+					<Button /*onClick={() => props.openAndEdit(meal)}*/>Edit Meal</Button>
+				</Card.Content>
 			</Card>
 		)
 	})

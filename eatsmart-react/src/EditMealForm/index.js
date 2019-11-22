@@ -32,10 +32,13 @@ class EditMealForm extends Component {
 				'Content-Type': 'application/json'
 			}
 		}).then(response =>{
+			console.log(response.data, "I am the response");
+			const foodUniqueId = response.data.parsed[0].food.foodId
 			const foodText = response.data.text;
 			const foodCal = response.data.parsed[0].food.nutrients.ENERC_KCAL
 			this.setState(state =>{
 				const food = state.food.concat({
+					foodId: foodUniqueId,
 					foodName: foodText,
 					foodCalories: foodCal
 				});
@@ -45,20 +48,22 @@ class EditMealForm extends Component {
 			})
 		})
 	}
-	resetState = () => {
+	removeFood = (i) => {
+		console.log(i)
 		this.setState({
-			meal_type: 'breakfast',
-			food: [],
-			query: ''
+			food: this.state.food.filter((food) => food.foodId !== i)
 		})
 	}
 	render(){
 		const addedFood = this.state.food.map((food, i) =>{
 			return(
-				<ul key={i}>
+				<div key={i}>
+				<ul>
 					Name: {food.foodName}<br/>
 					Calories: {food.foodCalories}
 				</ul>
+				<Button onClick={() => this.removeFood(food.foodId)}>Delete Food</Button>
+				</div>
 			)
 		})
 		return(
@@ -78,7 +83,6 @@ class EditMealForm extends Component {
 							<li>{addedFood}</li>
 						<Button type='Submit' onClick={(e) => {
 								this.props.close(e, this.state); 
-								this.resetState();
 							}}>Complete Meal</Button>
 					</Form>
 				</Modal.Content>
@@ -88,5 +92,4 @@ class EditMealForm extends Component {
 }
 
 export default EditMealForm
-
 
