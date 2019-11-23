@@ -124,6 +124,7 @@ class MainContainer extends Component {
 				const foodBody = {
 					'food_name': mealList[i].foodName ,
 					'food_calories': mealList[i].foodCalories,
+					'food_unique_id': mealList[i].foodId,
 					'meal': mealId
 				}
 				const createdFoodItemResponse = await fetch(process.env.REACT_APP_API_URL + '/api/v1/foodItems/', {

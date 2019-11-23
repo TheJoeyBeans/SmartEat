@@ -46,9 +46,9 @@ class EditMealForm extends Component {
 			const foodCal = response.data.parsed[0].food.nutrients.ENERC_KCAL
 			this.setState(state =>{
 				const food = state.food.concat({
-					foodId: foodUniqueId,
-					foodName: foodText,
-					foodCalories: foodCal
+					food_name: foodText,
+					food_calories: foodCal,
+					food_unique_id: foodUniqueId
 				});
 				return{
 					food
@@ -59,7 +59,7 @@ class EditMealForm extends Component {
 	removeFood = (i) => {
 		console.log(i)
 		this.setState({
-			food: this.state.food.filter((food) => food.foodId !== i)
+			food: this.state.food.filter((food) => food.food_unique_id !== i)
 		})
 	}
 	render(){
@@ -70,7 +70,7 @@ class EditMealForm extends Component {
 					Name: {food.food_name}<br/>
 					Calories: {food.food_calories}
 				</ul>
-				<Button onClick={() => this.removeFood(food.foodId)}>Delete Food</Button>
+				<Button onClick={() => this.removeFood(food.food_unique_id)}>Delete Food</Button>
 				</div>
 			)
 		})
