@@ -19,7 +19,6 @@ class MealSearch extends Component {
 		return(
 			<div>
 				<Search name='input' onSearchChange={this.handleChange} placeholder='Search'/>
-				<Button onClick={this.props.openAndCreate}>Make a Meal</Button>
 			</div>
 		)
 	}
