@@ -102,4 +102,3 @@ class MakeMealForm extends Component {
 export default MakeMealForm
 
 
-// Searchbar name='input' onChange={this.handleChange} placeholder='Search'

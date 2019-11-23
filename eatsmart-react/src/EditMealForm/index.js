@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
-import { Form, Button, Label, Modal } from 'semantic-ui-react';
+import { Search, Form, Button, Label, Modal } from 'semantic-ui-react';
 import { Searchbar } from 'react-native-paper';
 import axios from 'axios';
 const apiKey = 'dc1e6e6904af11f3792ca4dad0a5495b';
 const apiId = '230690a4';
 
 class EditMealForm extends Component {
-	constructor(){
-		super();
+	constructor(props){
+		super(props);
 
 		this.state = {
-			meal_type: 'breakfast',
+			meal_type: '',
 			food: [],
 			query: ''
 		}
@@ -59,8 +59,8 @@ class EditMealForm extends Component {
 			return(
 				<div key={i}>
 				<ul>
-					Name: {food.foodName}<br/>
-					Calories: {food.foodCalories}
+					Name: {food.food_name}<br/>
+					Calories: {food.food_calories}
 				</ul>
 				<Button onClick={() => this.removeFood(food.foodId)}>Delete Food</Button>
 				</div>
@@ -70,7 +70,7 @@ class EditMealForm extends Component {
 			<Modal open={this.props.open}>
 				<Modal.Content>
 					<Form>
-						<Label>Which meal is this?</Label>
+						<Label>Edit your meal</Label>
 							<select name='meal_type' onChange={this.handleMealType} className="ui dropdown">
 								<option value="breakfast">Breakfast</option>
 								<option value="lunch">Lunch</option>
@@ -78,12 +78,12 @@ class EditMealForm extends Component {
 								<option value="snack">Snack</option>
 							</select>
 						<Label>What are you eating?</Label>
-							<Searchbar name='input' onChange={this.handleChange} placeholder='Search'/>
+							<Search name='input' onSearchChange={this.handleChange} placeholder='Search'/>
 							<Button onClick={this.fetchSearchResults}>Add Food</Button>
 							<li>{addedFood}</li>
 						<Button type='Submit' onClick={(e) => {
 								this.props.close(e, this.state); 
-							}}>Complete Meal</Button>
+							}}>Finish Edits</Button>
 					</Form>
 				</Modal.Content>
 			</Modal>

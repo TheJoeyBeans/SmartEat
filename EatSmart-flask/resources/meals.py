@@ -20,7 +20,6 @@ def updated_meal(id):
 
 	meal_to_update.update(
 		meal_type=payload['meal_type'],
-		food=payload['food'],
 		calories=payload['calories']
 	).execute()
 
@@ -33,3 +32,9 @@ def create_meal():
 	meal = models.Meal.create(**payload)
 	meal_dict = model_to_dict(meal)
 	return jsonify(data=meal_dict, status={"code": 201, "message": "Success"})
+
+@meal.route('/<id>/', methods=["DELETE"])
+def delete_meal(id):
+	meal_to_delete = models.Meal.get(id=id)
+	meal_to_delete.delete()
+	return jsonify(data='resource successfully deleted', status={"code": 200, "message": "resource deleted successfully"})
