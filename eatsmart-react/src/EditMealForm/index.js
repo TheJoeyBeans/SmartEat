@@ -78,7 +78,8 @@ class EditMealForm extends Component {
 			<Modal open={this.props.open}>
 				<Modal.Content>
 					<Form>
-						<Label>Edit your meal</Label>
+						<Label>Edit your meal</Label><br/>
+						<Button onClick={this.props.closeNoEdit}> Close Tab </Button>
 							<select name='meal_type' onChange={this.handleMealType} className="ui dropdown">
 								<option value="breakfast">Breakfast</option>
 								<option value="lunch">Lunch</option>

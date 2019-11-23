@@ -76,8 +76,9 @@ class MakeMealForm extends Component {
 		return(
 			<Modal className='editModal' open={this.props.open}>
 				<Modal.Content>
-					<Modal.Description>
+					<Form>
 						<Label>Which meal is this?</Label><br/>
+						<Button onClick={this.props.closeNoEdit}> Close Tab </Button>
 							<select name='meal_type' onChange={this.handleMealType} className="ui dropdown">
 								<option value="breakfast">Breakfast</option>
 								<option value="lunch">Lunch</option>
@@ -92,7 +93,7 @@ class MakeMealForm extends Component {
 								this.props.close(e, this.state); 
 								this.resetState();
 							}}>Complete Meal</Button>
-					</Modal.Description>
+					</Form>
 				</Modal.Content>
 			</Modal>
 		)

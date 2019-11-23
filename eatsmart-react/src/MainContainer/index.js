@@ -152,6 +152,17 @@ class MainContainer extends Component {
 		console.log(meal);
 
 	}
+	closeModal = () =>{
+		this.setState({
+			showMakeMealModal: false, 
+			showEditMealModal: false,
+			mealToEdit: {
+				meal_type: '',
+				calories: ''
+			},
+			foodItemsToEdit: []
+		})
+	}
 	render(){
 		return(
 			<div>
@@ -163,8 +174,8 @@ class MainContainer extends Component {
 					<Grid.Row>
 						<MealList meals={this.state.meals} foodItems={this.state.foodItems} openAndEdit={this.openAndEdit} />
 					</Grid.Row>
-					<MakeMealForm open={this.state.showMakeMealModal} close={this.closeModalAndMakeMeal}/>
-					<EditMealForm meal={this.state.mealToEdit} foodItems={this.state.foodItemsToEdit} open={this.state.showEditMealModal} close={this.closeModalAndEditMeal}/>
+					<MakeMealForm open={this.state.showMakeMealModal} close={this.closeModalAndMakeMeal} closeNoEdit={this.closeModal}/>
+					<EditMealForm meal={this.state.mealToEdit} foodItems={this.state.foodItemsToEdit} open={this.state.showEditMealModal} close={this.closeModalAndEditMeal} closeNoEdit={this.closeModal}/>
 				</Grid>
 			</div>
 		)
