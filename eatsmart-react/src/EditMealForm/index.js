@@ -15,6 +15,14 @@ class EditMealForm extends Component {
 			query: ''
 		}
 	}
+	componentWillReceiveProps(nextProps){
+		if(nextProps.meal.meal_type !== this.props.meal.meal_type){
+			this.setState({
+				meal_type: nextProps.meal.meal_type,
+				food: nextProps.foodItems
+			})
+		}
+	}
 	handleChange = (e) => {
 		this.setState({
 			query: e.currentTarget.value
