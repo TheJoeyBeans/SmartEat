@@ -11,6 +11,7 @@ class EditMealForm extends Component {
 
 		this.state = {
 			meal_type: '',
+			mealId: '',
 			food: [],
 			query: ''
 		}
@@ -19,6 +20,7 @@ class EditMealForm extends Component {
 		if(nextProps.meal.meal_type !== this.props.meal.meal_type){
 			this.setState({
 				meal_type: nextProps.meal.meal_type,
+				mealId: nextProps.meal.id,
 				food: nextProps.foodItems
 			})
 		}

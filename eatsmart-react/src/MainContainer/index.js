@@ -14,6 +14,7 @@ class MainContainer extends Component {
 			meals: [],
 			foodItems:[],
 			mealToEdit: {
+				id: '',
 				meal_type: '',
 				calories: ''
 			},
@@ -68,6 +69,7 @@ class MainContainer extends Component {
 		console.log(foodItems, "This is food items")
 		this.setState({
 			mealToEdit: {
+				id: mealFromTheList.id,
 				meal_type: mealFromTheList.meal_type,
 				calories: mealFromTheList.calories
 			}, 
@@ -149,7 +151,51 @@ class MainContainer extends Component {
 
 	}
 	closeModalAndEditMeal = async (e, meal) => {
-		console.log(meal);
+		const mealKind = meal.meal_type;
+		let mealList = meal.food;
+		let totalCal = 0;
+		let mealId = ''
+		for(let i = 0; i < meal.food.length; i++){
+			totalCal += meal.food[i].food_calories
+		}
+		const mealBody = {
+			'meal_type' : mealKind,
+			'calories' : totalCal
+		}
+		console.log(meal, "This is meal");
+		e.preventDefault();
+
+		try{
+			const editMealUrl = `${process.env.REACT_APP_API_URL}/api/v1/meals/${this.state.mealToEdit.id}/`;
+			console.log(editMealUrl, "this is the edit url")
+			const editResponse = await fetch(editMealUrl, {
+				method: 'PUT',
+				credentials: 'include',
+				body: JSON.stringify(mealBody),
+				headers: {
+					'Content-Type' : 'application/json'
+				}
+			});
+			console.log(editResponse, "this is the edit response")
+			const editResponseParsed = await editResponse.json();
+			console.log(editResponseParsed, 'parsed edit')
+
+			const newMealsListWithEdit = this.state.meals.map((meal) =>{
+				if(meal.id === editResponseParsed.data.id){
+					meal = editResponseParsed.data
+				}
+
+				return meal
+			});
+
+			console.log(newMealsListWithEdit, "This is the newMealsListWithEdit");
+			this.setState({
+				showEditMealModal: false,
+				meals: newMealsListWithEdit
+			});
+		} catch(err){
+			console.log(err)
+		}
 
 	}
 	closeModal = () =>{
