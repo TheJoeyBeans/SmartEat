@@ -34,11 +34,9 @@ class MainContainer extends Component {
 				method: 'GET'
 			});
 			const parsedMeals = await meals.json();
-			console.log(parsedMeals, "Look at these parsedMeals");
 			this.setState({
 				meals: parsedMeals.data
 			})
-			console.log(this.state.meals, "Current Meals in state")
 		} catch(err){
 			console.log(err);
 		}
@@ -50,11 +48,9 @@ class MainContainer extends Component {
 				method: 'GET'
 			});
 			const parsedFoodItems = await foodItems.json();
-			console.log(parsedFoodItems, "look at these foodItems");
 			this.setState({
 				foodItems: parsedFoodItems.data
 			})
-			console.log(this.state.foodItems, "Current Food Items in state")
 		} catch(err){
 			console.log(err);
 		}
@@ -65,8 +61,6 @@ class MainContainer extends Component {
 		})
 	}
 	openAndEdit = (mealFromTheList, foodItems) => {
-		console.log(mealFromTheList, "This is meal from the list")
-		console.log(foodItems, "This is food items")
 		this.setState({
 			mealToEdit: {
 				id: mealFromTheList.id,
@@ -76,8 +70,6 @@ class MainContainer extends Component {
 			foodItemsToEdit: foodItems,
 			showEditMealModal: true
 		})
-		console.log(this.state.mealToEdit, "This is mealToEdit")
-		console.log(this.state.foodItemsToEdit, "This is foodItemsToEdit")
 	}
 	closeModalAndMakeMeal = async (e, meal) =>{
 		const mealKind = meal.meal_type;
@@ -118,8 +110,6 @@ class MainContainer extends Component {
 		this.createFoodItem(mealId, mealList);
 	}
 	createFoodItem = async (mealId, mealList) => {
-		console.log(mealId, "<--mealId");
-		console.log(mealList, "<--mealList");
 
 		try {
 			for(let i = 0; i < mealList.length; i++){
@@ -154,7 +144,7 @@ class MainContainer extends Component {
 		const mealKind = meal.meal_type;
 		let mealList = meal.food;
 		let totalCal = 0;
-		let mealId = ''
+		let mealId = '';
 		for(let i = 0; i < meal.food.length; i++){
 			totalCal += meal.food[i].food_calories
 		}
@@ -162,12 +152,10 @@ class MainContainer extends Component {
 			'meal_type' : mealKind,
 			'calories' : totalCal
 		}
-		console.log(meal, "This is meal");
 		e.preventDefault();
 
 		try{
 			const editMealUrl = `${process.env.REACT_APP_API_URL}/api/v1/meals/${this.state.mealToEdit.id}/`;
-			console.log(editMealUrl, "this is the edit url")
 			const editResponse = await fetch(editMealUrl, {
 				method: 'PUT',
 				credentials: 'include',
@@ -176,12 +164,10 @@ class MainContainer extends Component {
 					'Content-Type' : 'application/json'
 				}
 			});
-			console.log(editResponse, "this is the edit response")
 			const editResponseParsed = await editResponse.json();
-			console.log(editResponseParsed, 'parsed edit')
-
+			mealId = editResponseParsed.data.id;
 			const newMealsListWithEdit = this.state.meals.map((meal) =>{
-				if(meal.id === editResponseParsed.data.id){
+				if(meal.id === mealId){
 					meal = editResponseParsed.data
 				}
 
@@ -195,6 +181,48 @@ class MainContainer extends Component {
 			});
 		} catch(err){
 			console.log(err)
+		}
+		this.editFoodItem(mealId, mealList);
+	}
+	editFoodItem = async (mealId, mealList) => {
+	console.log(mealId, "<--mealId");
+	console.log(mealList, "<--mealList");
+		try {
+			for(let i = 0; i < mealList.length; i++){
+				const foodBody = {
+					'food_name': mealList[i].food_name ,
+					'food_calories': mealList[i].food_calories,
+					'food_unique_id': mealList[i].food_unique_id,
+					'meal': mealId
+				}
+				const editFoodItemUrl = `${process.env.REACT_APP_API_URL}/api/v1/meals/${this.state.foodItemsToEdit.id}/`;
+				console.log(editFoodItemUrl, "this is the edit url")
+				const editResponse = await fetch(editFoodItemUrl, {
+					method: 'PUT',
+					credentials: 'include',
+					body: JSON.stringify(foodBody),
+					headers: {
+						'Content-Type' : 'application/json'
+					}
+				});
+				console.log(editResponse, "this is the edit response")
+				const editResponseParsed = await editResponse.json();
+				console.log(editResponseParsed, 'parsed edit')
+				const newFoodItemsListWithEdit = this.state.foodItems.map((foodItem) =>{
+					if(foodItem.id === editResponseParsed.data.id){
+						foodItem = editResponseParsed.data
+					}
+					return foodItem
+				});
+				
+				this.setState({
+					foodItems: newFoodItemsListWithEdit
+				});
+			} 
+
+			} catch(err){
+				console.log('error')
+				console.log(err)
 		}
 
 	}
