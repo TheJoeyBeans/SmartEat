@@ -32,6 +32,7 @@ function MealList(props){
 					</Card.Content>
 					<Card.Content extra>
 						<Button onClick={() => props.openAndEdit(meal, props.foodItems)}>Edit Meal</Button>
+						<Button onClick={() => props.deleteMeal(meal.id)}>Delete Meal</Button>
 					</Card.Content>
 				</Card>
 			</Grid.Column>

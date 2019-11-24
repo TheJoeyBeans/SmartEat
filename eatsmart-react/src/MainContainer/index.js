@@ -237,6 +237,23 @@ class MainContainer extends Component {
 			foodItemsToEdit: []
 		})
 	}
+	deleteMeal = async (id) => {
+		console.log(id)
+		const deleteMealResponse = await fetch(process.env.REACT_APP_API_URL + '/api/v1/meals/' + id +'/', {
+			method: 'DELETE',
+			credentials: 'include'
+		});
+		
+		const deleteMealParsed = await deleteMealResponse.json();
+		console.log(deleteMealParsed)
+
+		if (deleteMealParsed.status.code === 200){
+			console.log(deleteMealParsed, ' response from Flask server')
+			this.setState({meals: this.state.meals.filter((meal) => meal.id !== id)})
+		} else {
+			alert(deleteMealParsed.status.message);
+		}
+	}
 	render(){
 		return(
 			<div>
@@ -246,7 +263,7 @@ class MainContainer extends Component {
 				</header>
 				<Grid columns={3}>	
 					<Grid.Row>
-						<MealList meals={this.state.meals} foodItems={this.state.foodItems} openAndEdit={this.openAndEdit} />
+						<MealList meals={this.state.meals} foodItems={this.state.foodItems} openAndEdit={this.openAndEdit} deleteMeal={this.deleteMeal}/>
 					</Grid.Row>
 					<MakeMealForm open={this.state.showMakeMealModal} close={this.closeModalAndMakeMeal} closeNoEdit={this.closeModal}/>
 					<EditMealForm meal={this.state.mealToEdit} foodItems={this.state.foodItemsToEdit} open={this.state.showEditMealModal} close={this.closeModalAndEditMeal} closeNoEdit={this.closeModal}/>
