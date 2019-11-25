@@ -237,13 +237,13 @@ class MainContainer extends Component {
 			foodItemsToEdit: []
 		})
 	}
-	deleteMeal = async (id) => {
-		console.log(id)
+	deleteMeal = async (id, foodItems) => {
+		console.log(id, "This is the meal ID")
+		console.log(foodItems, "this is the foodItems of the meal")
 		const deleteMealResponse = await fetch(process.env.REACT_APP_API_URL + '/api/v1/meals/' + id +'/', {
 			method: 'DELETE',
 			credentials: 'include'
 		});
-		
 		const deleteMealParsed = await deleteMealResponse.json();
 		console.log(deleteMealParsed)
 
@@ -252,6 +252,22 @@ class MainContainer extends Component {
 			this.setState({meals: this.state.meals.filter((meal) => meal.id !== id)})
 		} else {
 			alert(deleteMealParsed.status.message);
+		}
+
+		for(let i = 0; i < foodItems.length; i++){
+			const deleteFoodItemResponse = await fetch(process.env.REACT_APP_API_URL + '/api/v1/foodItems/' + foodItems[i].id + '/', {
+				method: 'DELETE',
+				credentials: 'include'
+			});
+			const deleteFoodItemParsed = await deleteFoodItemResponse.json();
+			console.log(deleteFoodItemParsed)
+
+			if (deleteFoodItemParsed.status.code === 200){
+				console.log(deleteFoodItemParsed, ' response from Flask server')
+				this.setState({foodItems: this.state.foodItems.filter((foodItem) => foodItem.id !== foodItems[i].id)})
+			} else {
+				alert(deleteFoodItemParsed.status.message);
+			}
 		}
 	}
 	render(){
