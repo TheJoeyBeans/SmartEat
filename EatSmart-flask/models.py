@@ -13,6 +13,7 @@ class Meal(Model):
 class Food_item(Model):
 	food_name = CharField()
 	food_calories = IntegerField()
+	food_unique_id = CharField()
 	meal = ForeignKeyField(Meal, backref='food_items')
 
 	class Meta:

@@ -11,8 +11,18 @@ class EditMealForm extends Component {
 
 		this.state = {
 			meal_type: '',
+			mealId: '',
 			food: [],
 			query: ''
+		}
+	}
+	componentWillReceiveProps(nextProps){
+		if(nextProps.meal.meal_type !== this.props.meal.meal_type){
+			this.setState({
+				meal_type: nextProps.meal.meal_type,
+				mealId: nextProps.meal.id,
+				food: nextProps.foodItems
+			})
 		}
 	}
 	handleChange = (e) => {
@@ -38,9 +48,9 @@ class EditMealForm extends Component {
 			const foodCal = response.data.parsed[0].food.nutrients.ENERC_KCAL
 			this.setState(state =>{
 				const food = state.food.concat({
-					foodId: foodUniqueId,
-					foodName: foodText,
-					foodCalories: foodCal
+					food_name: foodText,
+					food_calories: foodCal,
+					food_unique_id: foodUniqueId
 				});
 				return{
 					food
@@ -51,7 +61,7 @@ class EditMealForm extends Component {
 	removeFood = (i) => {
 		console.log(i)
 		this.setState({
-			food: this.state.food.filter((food) => food.foodId !== i)
+			food: this.state.food.filter((food) => food.food_unique_id !== i)
 		})
 	}
 	render(){
@@ -62,7 +72,7 @@ class EditMealForm extends Component {
 					Name: {food.food_name}<br/>
 					Calories: {food.food_calories}
 				</ul>
-				<Button onClick={() => this.removeFood(food.foodId)}>Delete Food</Button>
+				<Button onClick={() => this.removeFood(food.food_unique_id)}>Delete Food</Button>
 				</div>
 			)
 		})
@@ -70,7 +80,8 @@ class EditMealForm extends Component {
 			<Modal open={this.props.open}>
 				<Modal.Content>
 					<Form>
-						<Label>Edit your meal</Label>
+						<Label>Edit your meal</Label><br/>
+						<Button onClick={this.props.closeNoEdit}> Close Tab </Button>
 							<select name='meal_type' onChange={this.handleMealType} className="ui dropdown">
 								<option value="breakfast">Breakfast</option>
 								<option value="lunch">Lunch</option>
